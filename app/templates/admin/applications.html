@@ -51,7 +51,7 @@
       </summary>
       <div class="app-row-detail">
         <form method="post" action="{{ url_for('admin.update_status', application_id=application.id) }}" class="inline-form">
-          <select name="status">
+          <select name="status" class="status-select">
             {% for code in statuses %}
             <option value="{{ code }}" {{ 'selected' if application.status == code }}>{{ status_labels[code] }}</option>
             {% endfor %}

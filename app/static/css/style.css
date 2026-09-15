@@ -129,6 +129,8 @@ th, td { padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--li
 th { background: #fafbfc; color: var(--muted); font-size: 12px; font-weight: 600; }
 tr:last-child td { border-bottom: 0; }
 .inline-form { display: flex; gap: 8px; }
+.inline-form select { width: auto; flex: 0 0 auto; }
+.status-select { min-width: 172px; }
 
 /* Forms */
 .field { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 500; }
@@ -138,8 +140,9 @@ input, select, textarea {
 }
 .toolbar { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
 .toolbar input { max-width: 320px; }
-.apply-form { margin-top: 20px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+.apply-form { margin-top: 20px; display: flex; flex-direction: column; gap: 12px; }
 .apply-form textarea { width: 100%; min-width: 320px; }
+.apply-form > button.primary { align-self: flex-start; }
 
 /* Detail */
 .service-detail h1 { display: flex; align-items: center; gap: 10px; }
