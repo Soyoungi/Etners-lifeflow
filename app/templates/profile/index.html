@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}내 정보{% endblock %}
+{% block content %}
+<section class="section-block">
+  <h1>내 정보</h1>
+  <div class="panel profile-panel">
+    <dl class="profile-facts">
+      <dt>이름</dt><dd>{{ user.name }}</dd>
+      <dt>사번</dt><dd>{{ user.masked_employee_number() }}</dd>
+      <dt>회사</dt><dd>{{ user.company.name }}</dd>
+      <dt>부서</dt><dd>{{ user.department.name }}</dd>
+      <dt>직급</dt><dd>{{ user.position }}</dd>
+      <dt>직책</dt><dd>{{ user.title }}</dd>
+      <dt>입사일</dt><dd>{{ user.hire_date.strftime('%Y.%m.%d') }}</dd>
+      <dt>근속기간</dt><dd>{{ user.tenure_label }}</dd>
+      <dt>근무형태</dt><dd>{{ user.employment_type }}</dd>
+      <dt>근무지</dt><dd>{{ user.work_location }}</dd>
+    </dl>
+
+    {% if user.family_members %}
+    <h2>가족 정보</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>관계</th><th>이름</th><th>나이</th></tr></thead>
+        <tbody>
+        {% for member in user.family_members %}
+          <tr><td>{{ member.relationship_type }}</td><td>{{ member.name }}</td><td>{{ member.age if member.age is not none else '-' }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% macro apply_fields(service, show_heading=False) %}
+<div class="apply-fields-block" data-service-id="{{ service.id }}">
+  {% if show_heading %}
+  <div class="apply-fields-heading">
+    <span class="service-icon-sm">{{ service.thumbnail or '📦' }}</span>
+    <strong>{{ service.name }}</strong>
+    <span class="category">{{ service.category.name }}</span>
+  </div>
+  {% endif %}
+
+  <label class="field">
+    <span class="field-label">문의/요청 사항 (선택)</span>
+    <textarea name="note__{{ service.id }}" rows="2" placeholder="담당자에게 전달할 내용을 입력하세요."></textarea>
+  </label>
+
+  {% if service.required_documents_list %}
+  <div class="document-group">
+    <p class="field-label">필요 서류 첨부</p>
+    {% for doc in service.required_documents_list %}
+    <label class="field">
+      <span class="field-label">{{ doc }}</span>
+      <input type="file" name="document__{{ service.id }}__{{ loop.index0 }}">
+    </label>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <label class="field">
+    <span class="field-label">기타 첨부파일 (선택)</span>
+    <input type="file" name="document__{{ service.id }}__extra">
+  </label>
+
+  <div class="urgent-block" data-urgent-block data-service-id="{{ service.id }}">
+    <label class="check-label">
+      <input type="checkbox" name="urgent__{{ service.id }}" data-urgent-toggle>
+      긴급 신청 (희망일자 지정)
+    </label>
+    <div class="urgent-date-fields" hidden data-urgent-date-fields>
+      <div class="split-date">
+        <input type="text" inputmode="numeric" maxlength="4" placeholder="YYYY" data-urgent-year aria-label="년">
+        <span>-</span>
+        <input type="text" inputmode="numeric" maxlength="2" placeholder="MM" data-urgent-month aria-label="월">
+        <span>-</span>
+        <input type="text" inputmode="numeric" maxlength="2" placeholder="DD" data-urgent-day aria-label="일">
+        <input type="date" class="urgent-calendar" data-urgent-calendar aria-label="달력에서 날짜 선택">
+      </div>
+      <p class="field-error" data-urgent-error></p>
+      <input type="hidden" name="urgent_date__{{ service.id }}" data-urgent-hidden>
+    </div>
+  </div>
+</div>
+{% endmacro %}
