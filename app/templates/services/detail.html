@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% import "services/_apply_fields.html" as apply_macros %}
+{% block title %}{{ service.name }}{% endblock %}
+{% block content %}
+<section class="section-block">
+  <div class="service-detail panel">
+    <div class="card-top">
+      <span class="category">{{ service.category.icon }} {{ service.category.name }}</span>
+      <span class="status-badge {{ status_meta.css }}">{{ status_meta.emoji }} {{ status_meta.label }}</span>
+    </div>
+    <h1>{{ service.thumbnail }} {{ service.name }}</h1>
+    <p class="intro">{{ service.content or service.description }}</p>
+
+    <dl class="service-facts detail-facts">
+      {% if service.target_audience %}<dt>이용 대상</dt><dd>{{ service.target_audience }}</dd>{% endif %}
+      {% if service.support_content %}<dt>지원 내용</dt><dd>{{ service.support_content }}</dd>{% endif %}
+      {% if service.support_limit %}<dt>지원 한도</dt><dd>{{ service.support_limit }}</dd>{% endif %}
+      {% if service.start_date or service.end_date %}
+      <dt>이용 기간</dt>
+      <dd>{{ service.start_date.strftime('%Y.%m.%d') if service.start_date else '' }} ~ {{ service.end_date.strftime('%Y.%m.%d') if service.end_date else '' }}</dd>
+      {% endif %}
+      {% if service.application_start_date or service.application_end_date %}
+      <dt>신청 기간</dt>
+      <dd>{{ service.application_start_date.strftime('%Y.%m.%d') if service.application_start_date else '' }} ~ {{ service.application_end_date.strftime('%Y.%m.%d') if service.application_end_date else '' }}</dd>
+      {% endif %}
+      {% if service.contact_department %}<dt>문의처</dt><dd>{{ service.contact_department }} {{ service.contact_phone or '' }} {{ service.contact_email or '' }}</dd>{% endif %}
+    </dl>
+
+    {% if latest_application %}
+    <div class="notice">
+      최근 신청 상태: <strong>{{ latest_application.status_label }}</strong>
+      ({{ latest_application.applied_at.strftime('%Y-%m-%d') }} 신청)
+    </div>
+    {% endif %}
+
+    {% if status == 'APPLY_AVAILABLE' %}
+    <form method="post" action="{{ url_for('services.apply', service_id=service.id) }}" enctype="multipart/form-data" class="apply-form">
+      {{ apply_macros.apply_fields(service) }}
+      <button type="submit" class="primary">서비스 신청</button>
+    </form>
+    {% elif status == 'NOT_AVAILABLE' %}
+    <p class="notice">현재 인사정보 기준으로는 이용하실 수 없는 서비스입니다.</p>
+    {% elif status == 'EXPIRED' %}
+    <p class="notice">신청 기간이 종료되었습니다.</p>
+    {% elif status == 'AVAILABLE' %}
+    <p class="notice">신청 기간이 시작되면 신청 버튼이 활성화됩니다.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

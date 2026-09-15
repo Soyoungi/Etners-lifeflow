@@ -1,0 +1,32 @@
+{% macro service_card(item, selectable=False) %}
+{% set service = item.service %}
+{% set meta = item.status_meta %}
+<div class="service">
+  <div class="card-top">
+    {% if selectable and item.status == 'APPLY_AVAILABLE' %}
+    <label class="check-label select-check">
+      <input type="checkbox" name="service_ids" value="{{ service.id }}" form="multi-select-form">
+      선택
+    </label>
+    {% else %}
+    <span class="category">{{ service.category.icon or '' }} {{ service.category.name }}</span>
+    {% endif %}
+    <span class="status-badge {{ meta.css }}">{{ meta.emoji }} {{ meta.label }}</span>
+  </div>
+  <a class="service-body" href="{{ url_for('services.detail', service_id=service.id) }}">
+    {% if selectable and item.status == 'APPLY_AVAILABLE' %}
+    <span class="category">{{ service.category.icon or '' }} {{ service.category.name }}</span>
+    {% endif %}
+    <div class="service-icon">{{ service.thumbnail or '📦' }}</div>
+    <h3>{{ service.name }}</h3>
+    <p>{{ service.description }}</p>
+    <div class="card-bottom">
+      {% if service.application_end_date %}
+      <span class="deadline">신청기한 {{ service.application_end_date.strftime('%Y.%m.%d') }}</span>
+      {% else %}
+      <span class="deadline muted">상시 이용</span>
+      {% endif %}
+    </div>
+  </a>
+</div>
+{% endmacro %}

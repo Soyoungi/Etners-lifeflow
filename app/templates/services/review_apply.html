@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% import "services/_apply_fields.html" as apply_macros %}
+{% block title %}선택 서비스 신청{% endblock %}
+{% block content %}
+<section class="section-block">
+  <h1>선택한 서비스 신청</h1>
+  <p class="intro">아래 {{ services|length }}개 서비스에 대해 필요한 정보를 입력한 뒤 한 번에 신청하세요.</p>
+  <form method="post" action="{{ url_for('services.apply_batch_route') }}" enctype="multipart/form-data" class="batch-apply-form">
+    {% for service in services %}
+    <input type="hidden" name="service_ids" value="{{ service.id }}">
+    <div class="panel apply-fields-panel">
+      {{ apply_macros.apply_fields(service, show_heading=True) }}
+    </div>
+    {% endfor %}
+    <button type="submit" class="primary">전체 신청하기</button>
+  </form>
+</section>
+{% endblock %}

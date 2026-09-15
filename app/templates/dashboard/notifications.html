@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}알림{% endblock %}
+{% block content %}
+<section class="section-block">
+  <h1>🔔 알림</h1>
+  {% if notifications %}
+  <ul class="notif-list">
+    {% for n in notifications %}
+    <li class="{{ '' if n.is_read else 'unread' }}">
+      <strong>{{ n.title }}</strong>
+      <p>{{ n.message }}</p>
+      <span class="muted">{{ n.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="empty">알림이 없습니다.</div>
+  {% endif %}
+</section>
+{% endblock %}

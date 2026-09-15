@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}LifeFlow{% endblock %} · 이트너스 LifeFlow</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="{{ 'authed' if current_user.is_authenticated else '' }}">
+{% if current_user.is_authenticated %}
+<header>
+  <div class="header-inner">
+    <a class="logo-home" href="{{ url_for('dashboard.index') }}">이트너스 <strong>LifeFlow</strong></a>
+    <nav aria-label="주 메뉴">
+      <a href="{{ url_for('dashboard.index') }}" class="{{ 'active' if request.endpoint == 'dashboard.index' }}">홈</a>
+      <a href="{{ url_for('services.list_services') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('services.') }}">전체 서비스</a>
+      <a href="{{ url_for('applications.my_applications') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('applications.') }}">나의 신청 내역</a>
+      <a href="{{ url_for('profile.index') }}" class="{{ 'active' if request.endpoint == 'profile.index' }}">내 정보</a>
+      {% if current_user.is_admin %}
+      <a href="{{ url_for('admin.applications') }}" class="{{ 'active' if request.endpoint and request.endpoint.startswith('admin.') }}">관리자</a>
+      {% endif %}
+    </nav>
+    <div class="header-actions">
+      <div class="notif-wrap">
+        <button type="button" class="notif-bell" id="notif-bell-btn" aria-haspopup="true" aria-expanded="false" aria-label="알림">
+          🔔<span class="badge-dot" id="notif-badge" {{ 'hidden' if not unread_notification_count }}>{{ unread_notification_count }}</span>
+        </button>
+        <div class="notif-panel" id="notif-panel" hidden>
+          <div class="notif-panel-head">
+            <strong>알림</strong>
+            <a href="{{ url_for('dashboard.notifications') }}">전체 보기</a>
+          </div>
+          <div class="notif-panel-body" id="notif-panel-body">
+            <p class="muted">불러오는 중...</p>
+          </div>
+        </div>
+      </div>
+      <span class="user-chip">{{ current_user.name }}님</span>
+      <a href="{{ url_for('auth.logout') }}" class="text-button">로그아웃</a>
+    </div>
+  </div>
+</header>
+{% endif %}
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <div class="flash-wrap">
+    {% for message in messages %}
+    <div class="flash">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endwith %}
+
+<div id="app">
+{% block content %}{% endblock %}
+</div>
+
+<footer>이트너스 LifeFlow · 개인 맞춤형 Shared Service 플랫폼 <span>표시되는 서비스 조건과 신청기한은 예시 데이터 기준입니다.</span></footer>
+<script src="{{ url_for('static', filename='js/urgent_date.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</body>
+</html>
